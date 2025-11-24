@@ -1,3 +1,5 @@
+package modelos;
+
 public class Cliente extends Usuario {
 
     private String direccion;

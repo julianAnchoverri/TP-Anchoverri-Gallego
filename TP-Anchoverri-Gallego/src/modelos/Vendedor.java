@@ -1,3 +1,5 @@
+package modelos;
+
 public class Vendedor extends Usuario {
     private boolean activo = true;
 

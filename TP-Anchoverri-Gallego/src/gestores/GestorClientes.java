@@ -1,3 +1,7 @@
+package gestores;
+
+import modelos.Cliente;
+
 import java.util.HashMap;
 import java.util.Map;
 

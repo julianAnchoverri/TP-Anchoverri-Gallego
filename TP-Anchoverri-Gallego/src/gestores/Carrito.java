@@ -1,3 +1,9 @@
+package gestores;
+
+import modelos.Cliente;
+import modelos.OrdenDeCompra;
+import modelos.Producto;
+
 import java.util.HashSet;
 import java.util.Set;
 

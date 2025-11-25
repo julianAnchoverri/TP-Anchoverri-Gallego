@@ -59,14 +59,13 @@ public class Producto implements Seleccionable<String> {
 
     @Override
     public String toString() {
-        return "////////////////////\n" +
-                "Nombre: " + nombre +  "\n" +
+        return "//////////  "+ nombre +"  //////////\n" +
                 "Id: "+ id + "\n" +
                 "Descripcion: " + descripcion + "\n"+
                 "Precio: " + precio + "\n" +
                 "Stock: " + stock + "\n" +
                 "fechaPublicacion: " + fechaPublicacion + "\n" +
-                "////////////////////";
+                "///////////////////////////////////////";
     }
 
     // Hascode y equals

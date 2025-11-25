@@ -37,6 +37,11 @@ public class CategoriaProducto implements Seleccionable<String> {
         return getNombre();
     }
 
+    @Override
+    public String toString() {
+        return "- " + nombre + '\n';
+    }
+
     // Hascode y equals
 
     @Override

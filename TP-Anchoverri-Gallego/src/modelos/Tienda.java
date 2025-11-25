@@ -84,6 +84,11 @@ public class Tienda implements Seleccionable<String> {
         this.valoracion = valoracion;
     }
 
+    public HashMap<String, CategoriaProducto> getColeccionCategoriasProductos() { return coleccionCategoriasProductos; }
+    public void setColeccionCategoriasProductos(HashMap<String, CategoriaProducto> coleccionCategoriasProductos) {
+        this.coleccionCategoriasProductos = coleccionCategoriasProductos;
+    }
+
     @Override
     public String getClave() {
         return getNombre();
@@ -91,13 +96,12 @@ public class Tienda implements Seleccionable<String> {
 
     @Override
     public String toString() {
-        return "////////////////////\n" +
-                "Nombre: " + nombre +  "\n" +
+        return "//////////  "+ nombre +"  //////////\n" +
                 "Id: "+ id + "\n" +
                 "Valoracion: " + valoracion + "\n"+
                 "Cantidad de ventas: " + cantidadVentas + "\n" +
                 "Fecha de creacion: " + fechaCreacion + "\n" +
-                "////////////////////";
+                "///////////////////////////////////////";
     }
 
     // Hascode y equals

@@ -118,14 +118,7 @@ public class GestorTiendas{
     // Metodo crear tienda
 
     public Tienda crearTienda(String id, String nombre) throws ElementoYaExisteException {
-        Tienda t = new Tienda();
-        t.setId(id);
-        t.setNombre(nombre);
-        t.setFechaCreacion(LocalDate.now());
-        t.setCantidadVentas(0);
-        t.setValoracion("");
-        t.setLimiteDeOrdenes(10);
-        t.setLimiteHorasOrden(24);
+        Tienda t = new Tienda(id, nombre);
         return t;
     }
 

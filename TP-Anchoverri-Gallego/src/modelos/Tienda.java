@@ -21,13 +21,14 @@ public class Tienda implements Seleccionable<String> {
 
     private HashMap<String,CategoriaProducto> coleccionCategoriasProductos= new HashMap<>();
 
-    public Tienda() {}
-
     public Tienda(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.valoracion = "Baja (Tienda nueva)";;
+        this.valoracion = "Baja (Tienda nueva)";
         this.fechaCreacion = LocalDate.now();
+        this.cantidadVentas= 0;
+        this.limiteDeOrdenes=10;
+        this.limiteHorasOrden=24;
     }
 
     // Metodo para calcular fiabilidad

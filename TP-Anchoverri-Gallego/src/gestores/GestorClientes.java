@@ -42,7 +42,7 @@ public class GestorClientes {
         validarEmail(cliente.getEmail());
         validarNombreUsuario(cliente.getNombreUsuario());
 
-        if (coleccionClientes.contains(cliente.getNombreUsuario())) {
+        if (coleccionClientes.contains(cliente)) {
             throw new ElementoYaExisteException("Ya existe " + cliente.getNombreUsuario());
         }
         coleccionClientes.add(cliente);
@@ -67,7 +67,7 @@ public class GestorClientes {
 
     // Agregar resenia a un cliente
     public void agregarReseniaA(Cliente cliente, Resenia resenia) {
-        if (!coleccionClientes.contains(cliente.getNombreUsuario())) {
+        if (!coleccionClientes.contains(cliente)) {
             coleccionReseniasCliente.put(cliente.getNombreUsuario(), new ArrayList<Resenia>());
         }
         coleccionReseniasCliente.get(cliente.getNombreUsuario()).add(resenia);
@@ -84,7 +84,7 @@ public class GestorClientes {
 
     // Agregar orden a un cliente
     public void agregarOrdenA(Cliente cliente, OrdenDeCompra orden) {
-        if (!coleccionClientes.contains(cliente.getNombreUsuario())) {
+        if (!coleccionClientes.contains(cliente)) {
             coleccionOrdenesCliente.put(cliente.getNombreUsuario(), new ArrayList<OrdenDeCompra>());
         }
         coleccionOrdenesCliente.get(cliente.getNombreUsuario()).add(orden);

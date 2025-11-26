@@ -114,7 +114,7 @@ public class Main {
             scanner.nextLine();
             switch (opcion) {
                 case 1:
-                    vendedor.toString();
+                    System.out.println(vendedor.toString());
                     break;
                 case 2:
                     for(Tienda t: gv.obtenerTiendasDe(vendedor)){
@@ -209,10 +209,10 @@ public class Main {
                     break;
                 case 5:
                     try {
-                        CategoriaTienda cat= devolverObjeto(CategoriaTienda.class);
-                        gt.listarTiendas(cat);
+                        CategoriaTienda cate= devolverObjeto(CategoriaTienda.class);
+                        gt.listarTiendas(cate);
                         System.out.println("Ingrese el nombre de la tienda: ");
-                        gt.eliminarTienda(scanner.nextLine(), cat);
+                        gt.eliminarTienda(scanner.nextLine(), cate);
                         System.out.println("Tienda eliminada");
                     }catch (ElementoNoEncontradoException e){
                         System.out.println("Error: " + e.getMessage());

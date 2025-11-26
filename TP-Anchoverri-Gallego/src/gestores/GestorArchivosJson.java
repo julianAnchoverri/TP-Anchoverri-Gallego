@@ -1,6 +1,7 @@
 package gestores;
 
 import org.json.JSONObject;
+import utiles.JsonFactory;
 import utiles.JsonSerializable;
 
 import java.nio.charset.StandardCharsets;
@@ -16,5 +17,15 @@ public class GestorArchivosJson {
             throw new RuntimeException("Error guardando " + rutaArchivo + ": " + e.getMessage(), e);
         }
     }
-}
 
+    public static <T> T leerDesdeArchivo(String rutaArchivo, JsonFactory<T> factory) {
+        try {
+            String contenido = Files.readString(Path.of(rutaArchivo), StandardCharsets.UTF_8);
+            JSONObject json = new JSONObject(contenido);
+            return factory.fromJson(json);
+        } catch (Exception e) {
+            throw new RuntimeException("Error leyendo " + rutaArchivo + ": " + e.getMessage(), e);
+        }
+    }
+
+}

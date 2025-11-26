@@ -1,5 +1,7 @@
 package modelos;
 
+import org.json.JSONObject;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -26,6 +28,28 @@ public class Resenia {
     public void setPuntuacion(int puntuacion) { this.puntuacion = puntuacion; }
 
     public LocalDate getFecha() { return fecha; }
+
+    // --- Métodos toJson y fromJson ---
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("texto", texto);
+        json.put("puntuacion", puntuacion);
+        json.put("fecha", fecha.toString()); // LocalDate como String ISO
+        return json;
+    }
+
+    public static Resenia fromJson(JSONObject json) {
+        Resenia r = new Resenia(
+                json.getString("id"),
+                json.getString("texto"),
+                json.getInt("puntuacion")
+        );
+        // se reconstruye la fecha desde el JSON
+        r.fecha = LocalDate.parse(json.getString("fecha"));
+        return r;
+    }
+
 
 
     @Override

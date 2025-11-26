@@ -1,5 +1,7 @@
 package modelos;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utiles.Seleccionable;
 
 import java.util.HashMap;
@@ -39,6 +41,35 @@ public class CategoriaTienda implements Seleccionable<String> {
     public String toString() {
         return "- " + nombre + '\n';
     }
+
+    // --- Métodos toJson y fromJson ---
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("nombre", nombre);
+
+        JSONArray tiendasArray = new JSONArray();
+        for (Tienda t : coleccionTiendas) {
+            tiendasArray.put(t.toJson()); // delega en Tienda
+        }
+        json.put("tiendas", tiendasArray);
+
+        return json;
+    }
+
+    public static CategoriaTienda fromJson(JSONObject json) {
+        CategoriaTienda categoria = new CategoriaTienda(json.getString("nombre"));
+
+        JSONArray tiendasArray = json.getJSONArray("tiendas");
+        HashSet<Tienda> tiendas = new HashSet<>();
+        for (int i = 0; i < tiendasArray.length(); i++) {
+            JSONObject tiendaJson = tiendasArray.getJSONObject(i);
+            tiendas.add(Tienda.fromJson(tiendaJson)); // delega en Tienda
+        }
+        categoria.setColeccionTiendas(tiendas);
+
+        return categoria;
+    }
+
 
     // Hascode y equals
 

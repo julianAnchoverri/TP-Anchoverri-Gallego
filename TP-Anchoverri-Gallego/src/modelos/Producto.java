@@ -1,5 +1,6 @@
 package modelos;
 
+import org.json.JSONObject;
 import utiles.Seleccionable;
 
 import java.time.LocalDate;
@@ -51,6 +52,32 @@ public class Producto implements Seleccionable<String> {
     public LocalDate getFechaPublicacion() {
         return fechaPublicacion;
     }
+
+    // --- Métodos toJson y fromJson ---
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("nombre", nombre);
+        json.put("descripcion", descripcion);
+        json.put("precio", precio);
+        json.put("stock", stock);
+        json.put("disponible", disponible);
+        json.put("fechaPublicacion", fechaPublicacion.toString()); // LocalDate como String ISO
+        return json;
+    }
+
+    public static Producto fromJson(JSONObject json) {
+        return new Producto(
+                json.getString("id"),
+                json.getString("nombre"),
+                json.getString("descripcion"),
+                json.getDouble("precio"),
+                json.getInt("stock"),
+                json.getBoolean("disponible"),
+                LocalDate.parse(json.getString("fechaPublicacion"))
+        );
+    }
+
 
     @Override
     public String getClave() {

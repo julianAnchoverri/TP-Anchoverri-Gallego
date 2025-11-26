@@ -4,15 +4,17 @@ import modelos.CategoriaProducto;
 import modelos.CategoriaTienda;
 import modelos.Producto;
 import modelos.Tienda;
+import org.json.JSONObject;
 import utiles.ElementoNoEncontradoException;
 import utiles.ElementoYaExisteException;
+import utiles.JsonSerializable;
 import utiles.Seleccionable;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class GestorTiendas{
+public class GestorTiendas implements JsonSerializable {
     HashMap<String, CategoriaTienda> coleccionCategoriasTiendas= new HashMap<>();
 
     public GestorTiendas() {
@@ -126,5 +128,20 @@ public class GestorTiendas{
         buscarPorClaveGenerico(cat.getColeccionTiendas(), nuevo);
         t.setNombre(nuevo);
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        JSONObject categoriasJson = new JSONObject();
+        for (String clave : coleccionCategoriasTiendas.keySet()) {
+            CategoriaTienda categoria = coleccionCategoriasTiendas.get(clave);
+            categoriasJson.put(clave, categoria.toJson());
+        }
+
+        json.put("coleccionCategoriasTiendas", categoriasJson);
+        return json;
+    }
+
 
 }

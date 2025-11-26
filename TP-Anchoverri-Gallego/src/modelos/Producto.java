@@ -1,12 +1,13 @@
 package modelos;
 
 import org.json.JSONObject;
+import utiles.JsonSerializable;
 import utiles.Seleccionable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Producto implements Seleccionable<String> {
+public class Producto implements Seleccionable<String>, JsonSerializable {
     private String id;
     private String nombre;
     private String descripcion;
@@ -54,6 +55,7 @@ public class Producto implements Seleccionable<String> {
     }
 
     // --- Métodos toJson y fromJson ---
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("id", id);

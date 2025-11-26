@@ -1,0 +1,36 @@
+{
+  "coleccionClientes": [
+    {
+      "apellido": "Pérez",
+      "direccion": "Av. Colón 123",
+      "contrasenia": "Password123",
+      "nombreUsuario": "juan123",
+      "nombre": "Juan",
+      "email": "juan@mail.com",
+      "rol": "CLIENTE"
+    },
+    {
+      "apellido": "López",
+      "direccion": "San Martín 456",
+      "contrasenia": "ClaveSegura1",
+      "nombreUsuario": "maria456",
+      "nombre": "María",
+      "email": "maria@mail.com",
+      "rol": "CLIENTE"
+    }
+  ],
+  "coleccionOrdenesCliente": {"maria456": [{
+    "estado": "PENDIENTE",
+    "id": "O1",
+    "carrito": {
+      "total": 0,
+      "productos": []
+    }
+  }]},
+  "coleccionReseniasCliente": {"juan123": [{
+    "texto": "Muy buena atención",
+    "fecha": "2025-11-26",
+    "puntuacion": 5,
+    "id": "R1"
+  }]}
+}

@@ -1,16 +1,15 @@
 package modelos;
 
 import org.json.JSONObject;
+import utiles.JsonSerializable;
 import utiles.Seleccionable;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-public class Tienda implements Seleccionable<String> {
+public class Tienda implements Seleccionable<String>, JsonSerializable {
     private String id;
     private String nombre;
     private int cantidadVentas= 0;

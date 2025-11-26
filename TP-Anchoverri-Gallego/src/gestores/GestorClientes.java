@@ -1,13 +1,16 @@
 package gestores;
 
 import modelos.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utiles.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GestorClientes {
+public class GestorClientes implements JsonSerializable{
     private ArrayList<Cliente> coleccionClientes;
     private HashMap<String, ArrayList<Resenia>> coleccionReseniasCliente;
     private HashMap<String, ArrayList<OrdenDeCompra>> coleccionOrdenesCliente;
@@ -67,8 +70,8 @@ public class GestorClientes {
 
     // Agregar resenia a un cliente
     public void agregarReseniaA(Cliente cliente, Resenia resenia) {
-        if (!coleccionClientes.contains(cliente)) {
-            coleccionReseniasCliente.put(cliente.getNombreUsuario(), new ArrayList<Resenia>());
+        if (!coleccionReseniasCliente.containsKey(cliente.getNombreUsuario())) {
+            coleccionReseniasCliente.put(cliente.getNombreUsuario(), new ArrayList<>());
         }
         coleccionReseniasCliente.get(cliente.getNombreUsuario()).add(resenia);
     }
@@ -84,7 +87,7 @@ public class GestorClientes {
 
     // Agregar orden a un cliente
     public void agregarOrdenA(Cliente cliente, OrdenDeCompra orden) {
-        if (!coleccionClientes.contains(cliente)) {
+        if (!coleccionOrdenesCliente.containsKey(cliente.getNombreUsuario())) {
             coleccionOrdenesCliente.put(cliente.getNombreUsuario(), new ArrayList<OrdenDeCompra>());
         }
         coleccionOrdenesCliente.get(cliente.getNombreUsuario()).add(orden);
@@ -155,6 +158,43 @@ public class GestorClientes {
         Cliente cliente = buscarPorNombreUsuario(nombre);
         cliente.setNombreUsuario(nuevoNombreUsuario);
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        // Serializar clientes
+        JSONArray clientesArray = new JSONArray();
+        for (Cliente c : coleccionClientes) {
+            clientesArray.put(c.toJson());
+        }
+        json.put("coleccionClientes", clientesArray);
+
+        // Serializar reseñas por cliente
+        JSONObject reseniasObj = new JSONObject();
+        for (String claveCliente : coleccionReseniasCliente.keySet()) {
+            JSONArray reseniasArray = new JSONArray();
+            for (Resenia r : coleccionReseniasCliente.get(claveCliente)) {
+                reseniasArray.put(r.toJson());
+            }
+            reseniasObj.put(claveCliente, reseniasArray);
+        }
+        json.put("coleccionReseniasCliente", reseniasObj);
+
+        // Serializar órdenes por cliente
+        JSONObject ordenesObj = new JSONObject();
+        for (String claveCliente : coleccionOrdenesCliente.keySet()) {
+            JSONArray ordenesArray = new JSONArray();
+            for (OrdenDeCompra o : coleccionOrdenesCliente.get(claveCliente)) {
+                ordenesArray.put(o.toJson());
+            }
+            ordenesObj.put(claveCliente, ordenesArray);
+        }
+        json.put("coleccionOrdenesCliente", ordenesObj);
+
+        return json;
+    }
+
 
 
 }

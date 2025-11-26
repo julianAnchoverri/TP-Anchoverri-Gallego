@@ -1,0 +1,14 @@
+{"coleccionReseniasTiendas": {
+  "TechWorld": [{
+    "texto": "Entrega rápida",
+    "fecha": "2025-11-26",
+    "puntuacion": 4,
+    "id": "R2"
+  }],
+  "Supermercado La Esquina": [{
+    "texto": "Muy buena atención",
+    "fecha": "2025-11-26",
+    "puntuacion": 5,
+    "id": "R1"
+  }]
+}}

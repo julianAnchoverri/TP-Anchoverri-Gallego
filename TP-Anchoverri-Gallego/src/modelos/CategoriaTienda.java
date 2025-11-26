@@ -2,13 +2,13 @@ package modelos;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utiles.JsonSerializable;
 import utiles.Seleccionable;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
-public class CategoriaTienda implements Seleccionable<String> {
+public class CategoriaTienda implements Seleccionable<String>, JsonSerializable {
     private String nombre;
     private HashSet<Tienda> coleccionTiendas= new HashSet<>();
 
@@ -43,6 +43,7 @@ public class CategoriaTienda implements Seleccionable<String> {
     }
 
     // --- Métodos toJson y fromJson ---
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("nombre", nombre);

@@ -1,0 +1,64 @@
+{
+  "coleccionTiendasVendedor": {
+    "pedroVend": [{
+      "limiteHorasOrden": 24,
+      "categorias": {"Bebidas": {
+        "nombre": "Bebidas",
+        "productos": [{
+          "descripcion": "Botella 2L",
+          "precio": 1500,
+          "id": "P1",
+          "stock": 100,
+          "fechaPublicacion": "2025-11-26",
+          "nombre": "Agua Mineral",
+          "disponible": true
+        }]
+      }},
+      "cantidadVentas": 0,
+      "fechaCreacion": "2025-11-26",
+      "valoracion": "Baja (Tienda nueva)",
+      "id": "T1",
+      "nombre": "Supermercado La Esquina",
+      "limiteDeOrdenes": 10
+    }],
+    "anaVend": [{
+      "limiteHorasOrden": 24,
+      "categorias": {"Computación": {
+        "nombre": "Computación",
+        "productos": [{
+          "descripcion": "Intel i5, 8GB RAM",
+          "precio": 550000,
+          "id": "P2",
+          "stock": 15,
+          "fechaPublicacion": "2025-11-26",
+          "nombre": "Notebook 14\"",
+          "disponible": true
+        }]
+      }},
+      "cantidadVentas": 0,
+      "fechaCreacion": "2025-11-26",
+      "valoracion": "Baja (Tienda nueva)",
+      "id": "T2",
+      "nombre": "TechWorld",
+      "limiteDeOrdenes": 10
+    }]
+  },
+  "coleccionVendedores": [
+    {
+      "apellido": "Gómez",
+      "contrasenia": "PassVendedor1",
+      "nombreUsuario": "pedroVend",
+      "nombre": "Pedro",
+      "email": "pedro@shop.com",
+      "rol": "VENDEDOR"
+    },
+    {
+      "apellido": "Suárez",
+      "contrasenia": "PassVendedor2",
+      "nombreUsuario": "anaVend",
+      "nombre": "Ana",
+      "email": "ana@shop.com",
+      "rol": "VENDEDOR"
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 package modelos;
 
 import org.json.JSONObject;
+import utiles.JsonSerializable;
 
-public class Cliente extends Usuario {
+public class Cliente extends Usuario implements JsonSerializable {
     private String direccion;
 
     public Cliente(String nombre, String apellido, String email, String nombreUsuario, String contrasenia, String direccion) {
@@ -15,6 +16,7 @@ public class Cliente extends Usuario {
     public void setDireccion(String direccion) { this.direccion = direccion; }
 
     // Convierte el objeto a JSON
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("nombre", nombre);

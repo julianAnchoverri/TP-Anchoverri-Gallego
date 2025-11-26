@@ -1,0 +1,18 @@
+{"coleccionOrdenesTiendas": {
+  "TechWorld": [{
+    "estado": "PENDIENTE",
+    "id": "O2",
+    "carrito": {
+      "total": 0,
+      "productos": []
+    }
+  }],
+  "Supermercado La Esquina": [{
+    "estado": "PENDIENTE",
+    "id": "O1",
+    "carrito": {
+      "total": 0,
+      "productos": []
+    }
+  }]
+}}

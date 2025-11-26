@@ -2,11 +2,14 @@ package gestores;
 
 import modelos.Tienda;
 import modelos.Vendedor;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utiles.JsonSerializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GestorVendedores {
+public class GestorVendedores implements JsonSerializable {
     private ArrayList<Vendedor> coleccionVendedores = new ArrayList<>();
     private HashMap<String, ArrayList<Tienda>> coleccionTiendasVendedor = new HashMap<>();
 
@@ -46,4 +49,31 @@ public class GestorVendedores {
         }
         return coleccionTiendasVendedor.get(vendedor.getNombreUsuario());
     }
+
+    //--metodos from y to json--
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        // Serializar vendedores
+        JSONArray vendedoresArray = new JSONArray();
+        for (Vendedor v : coleccionVendedores) {
+            vendedoresArray.put(v.toJson()); // cada Vendedor debe implementar JsonSerializable
+        }
+        json.put("coleccionVendedores", vendedoresArray);
+
+        // Serializar tiendas por vendedor
+        JSONObject tiendasObj = new JSONObject();
+        for (String key : coleccionTiendasVendedor.keySet()) {
+            JSONArray tiendasArray = new JSONArray();
+            for (Tienda t : coleccionTiendasVendedor.get(key)) {
+                tiendasArray.put(t.toJson()); // cada Tienda también debe implementar JsonSerializable
+            }
+            tiendasObj.put(key, tiendasArray);
+        }
+        json.put("coleccionTiendasVendedor", tiendasObj);
+
+        return json;
+    }
+
 }

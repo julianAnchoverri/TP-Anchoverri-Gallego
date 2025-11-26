@@ -3,13 +3,16 @@ package gestores;
 import modelos.Cliente;
 import modelos.Resenia;
 import modelos.Tienda;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utiles.ElementoYaExisteException;
+import utiles.JsonSerializable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GestorResenias {
+public class GestorResenias implements JsonSerializable {
     private HashMap<String, ArrayList<Resenia>> coleccionReseniasTiendas;
 
     public GestorResenias() {
@@ -62,4 +65,22 @@ public class GestorResenias {
         else valoracion = "Excelente";
         return valoracion;
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        JSONObject reseniasObj = new JSONObject();
+        for (String claveTienda : coleccionReseniasTiendas.keySet()) {
+            JSONArray reseniasArray = new JSONArray();
+            for (Resenia r : coleccionReseniasTiendas.get(claveTienda)) {
+                reseniasArray.put(r.toJson()); // cada Resenia sabe serializarse
+            }
+            reseniasObj.put(claveTienda, reseniasArray);
+        }
+
+        json.put("coleccionReseniasTiendas", reseniasObj);
+        return json;
+    }
+
 }

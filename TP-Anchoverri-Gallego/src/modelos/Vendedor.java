@@ -1,8 +1,10 @@
 package modelos;
 
+import gestores.GestorJson;
+import utiles.*;
 import org.json.JSONObject;
 
-public class Vendedor extends Usuario {
+public class Vendedor extends Usuario implements JsonSerializable {
 
     public Vendedor(String nombre, String apellido, String email, String nombreUsuario, String contrasenia) {
         super(nombre, apellido, email, nombreUsuario, contrasenia);
@@ -10,6 +12,7 @@ public class Vendedor extends Usuario {
     }
 
     // Convierte el objeto a JSON
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("nombre", nombre);

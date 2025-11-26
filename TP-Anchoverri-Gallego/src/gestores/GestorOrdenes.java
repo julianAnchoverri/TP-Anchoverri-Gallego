@@ -1,13 +1,16 @@
 package gestores;
 
 import modelos.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utiles.JsonSerializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
 
 
-public class GestorOrdenes {
+public class GestorOrdenes implements JsonSerializable {
     private Map<String, ArrayList<OrdenDeCompra>> coleccionOrdenesTiendas;
 
     public GestorOrdenes() {
@@ -55,4 +58,22 @@ public class GestorOrdenes {
                 "totalOrdenes=" + coleccionOrdenesTiendas.size() +
                 '}';
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        JSONObject ordenesObj = new JSONObject();
+        for (String claveTienda : coleccionOrdenesTiendas.keySet()) {
+            JSONArray ordenesArray = new JSONArray();
+            for (OrdenDeCompra o : coleccionOrdenesTiendas.get(claveTienda)) {
+                ordenesArray.put(o.toJson()); // cada OrdenDeCompra sabe serializarse
+            }
+            ordenesObj.put(claveTienda, ordenesArray);
+        }
+
+        json.put("coleccionOrdenesTiendas", ordenesObj);
+        return json;
+    }
+
 }

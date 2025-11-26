@@ -1,11 +1,12 @@
 package modelos;
 
 import org.json.JSONObject;
+import utiles.JsonSerializable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Resenia {
+public class Resenia implements JsonSerializable {
     private String id;
     private String texto;
     private int puntuacion; // 1 a 5
@@ -30,6 +31,7 @@ public class Resenia {
     public LocalDate getFecha() { return fecha; }
 
     // --- Métodos toJson y fromJson ---
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("id", id);

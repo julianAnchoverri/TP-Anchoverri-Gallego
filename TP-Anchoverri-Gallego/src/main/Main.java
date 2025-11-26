@@ -1,8 +1,11 @@
 package main;
 
+import gestores.GestorArchivosJson;
 import gestores.GestorTiendas;
+import gestores.GestorTiendasFactory;
 import gestores.GestorVendedores;
 import modelos.*;
+import gestores.*;
 import utiles.ElementoNoEncontradoException;
 import utiles.ElementoYaExisteException;
 
@@ -231,8 +234,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
-
-
     }
 }
+

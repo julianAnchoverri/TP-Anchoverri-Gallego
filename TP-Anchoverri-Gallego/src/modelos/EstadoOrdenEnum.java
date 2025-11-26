@@ -2,6 +2,7 @@ package modelos;
 
 public enum EstadoOrdenEnum {
     PENDIENTE,
-    VENCIDO,
-    REALIZADO;
+    EXPIRADA,
+    CANCELADA,
+    FINALIZADA;
 }

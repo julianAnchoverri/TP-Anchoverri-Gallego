@@ -17,6 +17,7 @@ public class Main {
     GestorVendedores gv= new GestorVendedores();
     GestorClientes gc= new GestorClientes();
     GestorOrdenes go= new GestorOrdenes();
+    GestorResenias gr= new GestorResenias();
     public final int maximaCantidadOrdenes=50;
     public final int maximaCantidadHoras=72;
 
@@ -222,7 +223,40 @@ public class Main {
                     }
                     break;
                 case 6:
-                    modificarOrden(); // pendiente
+                    //modificarOrden(); // pendiente
+                    /*
+                    do {
+
+                        tiendaElegida.listarOrdenesActivas();
+                        System.out.println("seleccionar id de orden a modificar;");
+                        int id = scanner.nextInt();
+                        scanner.nextLine();
+                        OrdenDeCompra orden = tiendaElegida.buscaOrdenPorId(id);
+                        System.out.println("seleccionar el nuevo estado de orden: ");
+                        System.out.println("1. FINALIZADA");
+                        System.out.println("2. CANCELADA");
+                        System.out.println("3. EXPIRADA");
+                        int opcion =  scanner.nextInt();
+
+                        switch (opcion){
+                            case 1:
+                                tiendaElegida.actualizarEstadoOrden(orden, EstadoOrden.FINALIZADA);
+                                orden.getTienda().agregarOrdenesFinalizadas(orden);
+                                tiendaElegida.sumarVenta();
+                                break;
+                            case 2:
+                                tiendaElegida.actualizarEstadoOrden(orden, EstadoOrden.CANCELADA);
+                                orden.getProducto().reducirStock(orden.getCantidad());
+                                break;
+                            case 3:
+                                tiendaElegida.actualizarEstadoOrden(orden, EstadoOrden.EXPIRADA);
+                                orden.getProducto().reducirStock(orden.getCantidad());
+                                break;
+                        }
+
+                        System.out.println("Quiere modificar otra orden?[S/N]");
+                        respuesta=scanner.nextLine().trim().toUpperCase().charAt(0);
+                    }while(respuesta == 'S');*/
                     break;
                 case 7:
                     System.out.println("Volviendo al menú principal...");
@@ -240,9 +274,11 @@ public class Main {
             System.out.println("-----------------------------");
             System.out.println("1. Ver perfil");
             System.out.println("2. Ver el catalogo");
-            System.out.println("3. Ver mis compras");
-            System.out.println("4. Ver mis reseñas");
-            System.out.println("5. Volver al menú principal");
+            System.out.println("3. Hacer compra");
+            System.out.println("4. Hacer reseña");
+            System.out.println("5. Ver mis compras");
+            System.out.println("6. Ver mis reseñas");
+            System.out.println("7. Volver al menú principal");
             System.out.print("Seleccione una opción: ");
 
             while (!scanner.hasNextInt()) {
@@ -259,42 +295,6 @@ public class Main {
                     break;
                 case 2:
                     Producto p = devolverObjeto(Producto.class);
-                    if(p==null){
-                        break;
-                    }
-                    System.out.println("seleccione una opcion: ");
-                    System.out.println("1. hacer una orden de compra: ");
-                    System.out.println("2. hacer reseña: ");
-                    System.out.println("3. salir: ");
-                    int seleccion;
-                    do {
-                        seleccion = scanner.nextInt();
-                        switch (seleccion) {
-                            case 1:
-                                System.out.println("Seleccione nuevamente la tienda: ");
-                                Tienda t= devolverObjeto(Tienda.class);
-
-
-                                System.out.println("orden generada");
-                                seleccion = 3;
-                                break;
-                            case 2:
-                                try {
-                                    crearResenia(p);
-                                } catch (PuntuacionInvalidaException e) {
-                                    System.out.println(e.getMessage());
-                                }
-                                System.out.println("Reseña finalizada");
-                                seleccion = 3;
-                                break;
-                            case 3:
-                                System.out.println("Volviendo al menú principal...");
-                                return;
-                            default:
-                                System.out.println("opcion invalida, vuelva a ingresar");
-                        }
-
-                    } while(seleccion != 3);
                     break;
                 case 3:
                     Carrito carrito= new Carrito();
@@ -315,6 +315,7 @@ public class Main {
                     do {
                         tienda = devolverObjeto(Tienda.class);
                     }while (tienda == null);
+                    go.verificarOrdenesExpiradas(tienda);
                     if(go.getColeccionOrdenesTiendas().get(tienda.getClave()).size() >= tienda.getLimiteDeOrdenes()) {
                         System.out.println("Se alcanzó el límite de órdenes activas en la tienda. Operacion cancelada");
                         break;
@@ -324,20 +325,45 @@ public class Main {
                     OrdenDeCompra orden= go.crearOrden(cliente.getNombreUsuario()+fechaStr, carrito);
                     go.agregarOrdenA(tienda,orden);
                     gc.agregarOrdenA(cliente,orden);
-
-
-
-
-                case 3:
-                    System.out.println("Compras de "+ cliente.getNombreCompleto());
-                    verCompras();
+                    System.out.println("orden generada con exito");
                     break;
-
                 case 4:
-                    System.out.println("Reseñas de " +  cliente.getNombreCompleto());
-                    listarComentarios();
+                    System.out.println("== Menu de seleccion == \n Va a seleccionar la tienda que reseñara (Ingrese F para terminar)");
+                    Tienda t= devolverObjeto(Tienda.class);
+                    if(t==null){
+                        System.out.println("Operacion finalizada");
+                        break;
+                    }
+                    fecha = LocalDate.now();
+                    fechaStr = fecha.toString();// para crear id unico
+                    System.out.println("Ingrese un breve texto. Luego presione enter: ");
+                    String texto= scanner.nextLine();
+                    int puntuacion;
+                    while (true){
+                        System.out.println("Ingrese la puntuacion que quiere darle a la tienda (entre 1 y 5)");
+                        puntuacion= scanner.nextInt();
+                        scanner.nextLine();
+                        if(puntuacion>=1 && puntuacion<=5) break;
+                    }
+                    Resenia resenia= gr.crearResenia(cliente.getNombreUsuario()+fechaStr,texto,puntuacion);
+                    gr.agregarReseniaA(t,resenia);
+                    gc.agregarReseniaA(cliente,resenia);
+                    gt.actualizarValoracionTienda(gr.calcularValoracion(t),t);
                     break;
                 case 5:
+                    System.out.println("Ordenes de compra de "+cliente.getNombreUsuario());
+                    for(OrdenDeCompra o: gc.obtenerOrdenesDe(cliente) ){
+                        System.out.println(o.toString());
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Reseñas de "+cliente.getNombreUsuario());
+                    for(Resenia r: gc.obtenerReseniasDe(cliente)){
+                        System.out.println(r.toString());
+                    }
+                    break;
+                case 7:
                     System.out.println("Volviendo al menú principal...");
                     return;
                 default:

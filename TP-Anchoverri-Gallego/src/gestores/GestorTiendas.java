@@ -129,6 +129,10 @@ public class GestorTiendas implements JsonSerializable {
         t.setNombre(nuevo);
     }
 
+    public void actualizarValoracionTienda(String valoracion, Tienda tienda){
+        tienda.setValoracion(valoracion);
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

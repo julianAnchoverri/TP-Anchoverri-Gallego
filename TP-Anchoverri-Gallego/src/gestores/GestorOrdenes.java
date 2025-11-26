@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import utiles.JsonSerializable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
@@ -50,6 +52,19 @@ public class GestorOrdenes implements JsonSerializable {
     // Cantidad total de órdenes
     public int cantidadOrdenes() {
         return coleccionOrdenesTiendas.size();
+    }
+
+    public void verificarOrdenesExpiradas(Tienda tienda){
+        for(String clave: coleccionOrdenesTiendas.keySet()){
+            if(tienda.getNombre().equalsIgnoreCase(clave)){
+                for (OrdenDeCompra orden: coleccionOrdenesTiendas.get(clave)){
+                    if (LocalDateTime.now().isAfter(orden.getFecha().plusHours(tienda.getLimiteHorasOrden()))){
+                        orden.setEstado(EstadoOrdenEnum.EXPIRADA);
+                        orden.getCarrito().vaciarCarrito();
+                    }
+                }
+            }
+        }
     }
 
     @Override

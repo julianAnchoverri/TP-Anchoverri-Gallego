@@ -5,15 +5,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import utiles.JsonSerializable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class OrdenDeCompra implements JsonSerializable {
     private String id;
     private Carrito carrito;
     private EstadoOrdenEnum estado;
+    private LocalDateTime fecha;
+
 
     public OrdenDeCompra(String id, Carrito carrito) {
         this.id = id;
         this.carrito= carrito;
         this.estado = EstadoOrdenEnum.PENDIENTE;// por defecto
+        this.fecha= LocalDateTime.now();
     }
 
     public String getId() { return id; }
@@ -25,12 +31,15 @@ public class OrdenDeCompra implements JsonSerializable {
     public EstadoOrdenEnum getEstado() { return estado; }
     public void setEstado(EstadoOrdenEnum estado) { this.estado = estado; }
 
+    public LocalDateTime getFecha() { return fecha; }
+
     // --- Métodos toJson y fromJson ---
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("id", id);
         json.put("estado", estado.toString());
+        json.put("fecha",fecha);
 
         // Serializar carrito manualmente
         JSONObject carritoJson = new JSONObject();
@@ -66,12 +75,12 @@ public class OrdenDeCompra implements JsonSerializable {
         return orden;
     }
 
-
     @Override
     public String toString() {
-        return "OrdenDeCompra{" +
-                "id='" + id + '\'' +
-                ", estado=" + estado +
-                '}';
+        return "//////////  OrdenDeCompra  //////////\n" +
+                "Id: "+ id + "\n" +
+                "Estado: " + estado + "\n"+
+                "Fecha: " + fecha + "\n" +
+                "///////////////////////////////////////";
     }
 }

@@ -25,14 +25,21 @@ public class Carrito implements JsonSerializable {
 
     // Métodos para manejar productos
     public void agregarProducto(Producto p) {
-        productos.add(p);
+        if(p.getStock()>0) {
+            productos.add(p);
+            p.setStock(p.getStock()-1);
+        }
     }
 
     public void quitarProducto(Producto p) {
         productos.remove(p);
+        p.setStock(p.getStock()+1);
     }
 
     public void vaciarCarrito() {
+        for(Producto p: productos){
+            p.setStock(p.getStock()+1);
+        }
         productos.clear();
     }
 
@@ -50,6 +57,7 @@ public class Carrito implements JsonSerializable {
             total += p.getPrecio();
         }
     }
+
 
     @Override
     public JSONObject toJson() {

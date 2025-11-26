@@ -1,30 +1,27 @@
 package modelos;
 
+import gestores.Carrito;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class OrdenDeCompra {
     private String id;
-    private Cliente cliente; /// O GUARDAR SOLO EL ID DEL CLIENTE PARA SER MAS LIVIANO CUANDO LO PASAS A JSON
-    private Set<Producto> productos;
+    private Carrito carrito;
     private EstadoOrdenEnum estado;
     private double total;
 
-    public OrdenDeCompra(String id, Cliente cliente) {
+    public OrdenDeCompra(String id, Carrito carrito) {
         this.id = id;
-        this.cliente = cliente;
-        this.productos = new HashSet<>();
+        this.carrito= carrito;
         this.estado = EstadoOrdenEnum.PENDIENTE;// por defecto
     }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public Cliente getCliente() { return cliente; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
-
-    public Set<Producto> getProductos() { return productos; }
-    public void setProductos(Set<Producto> productos) { this.productos = productos; }
+    public Carrito getCarrito() { return carrito; }
+    public void setCarrito(Carrito carrito) { this.carrito = carrito; }
 
     public EstadoOrdenEnum getEstado() { return estado; }
     public void setEstado(EstadoOrdenEnum estado) { this.estado = estado; }
@@ -36,7 +33,6 @@ public class OrdenDeCompra {
     public String toString() {
         return "OrdenDeCompra{" +
                 "id='" + id + '\'' +
-                ", cliente=" + cliente.getNombre() + " " + cliente.getApellido() +
                 ", productos=" + productos.size() +
                 ", estado=" + estado +
                 '}';

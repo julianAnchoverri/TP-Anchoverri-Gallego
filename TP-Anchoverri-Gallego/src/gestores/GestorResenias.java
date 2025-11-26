@@ -38,8 +38,8 @@ public class GestorResenias {
     }
 
     public Resenia crearResenia(String id, String texto, int puntuacion) {
-        Resenia t = new Resenia(id,texto,puntuacion);
-        return t;
+        Resenia r = new Resenia(id,texto,puntuacion);
+        return r;
     }
 
     public String calcularValoracion(Tienda tienda) {

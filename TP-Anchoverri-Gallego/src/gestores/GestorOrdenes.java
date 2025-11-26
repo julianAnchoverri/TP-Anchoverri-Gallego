@@ -8,55 +8,51 @@ import java.util.*;
 
 
 public class GestorOrdenes {
-    private Map<String, OrdenDeCompra> ordenes;
+    private Map<String, ArrayList<OrdenDeCompra>> coleccionOrdenesTiendas;
 
     public GestorOrdenes() {
-        this.ordenes = new HashMap<>();
+        this.coleccionOrdenesTiendas = new HashMap<>();
     }
 
-    // Guardar una orden
-    public void guardarOrden(OrdenDeCompra orden) {
-        if (orden == null || orden.getId() == null) {
-            throw new IllegalArgumentException("Orden inválida");
+    // Getters y Setters
+    public Map<String, ArrayList<OrdenDeCompra>> getColeccionOrdenesTiendas() { return coleccionOrdenesTiendas; }
+    public void setColeccionOrdenesTiendas(Map<String, ArrayList<OrdenDeCompra>> coleccionOrdenesTiendas) { this.coleccionOrdenesTiendas = coleccionOrdenesTiendas; }
+
+    // Agregar orden a una tienda
+    public void agregarOrdenA(Tienda tienda, OrdenDeCompra orden) {
+        if (!coleccionOrdenesTiendas.containsKey(tienda.getClave())) {
+            coleccionOrdenesTiendas.put(tienda.getClave(), new ArrayList<OrdenDeCompra>());
         }
-        ordenes.put(orden.getId(), orden);
+        coleccionOrdenesTiendas.get(tienda.getClave()).add(orden);
     }
 
-    // Buscar una orden por ID
-    public OrdenDeCompra buscarOrden(String id) {
-        return ordenes.get(id);
-    }
-
-    // Eliminar una orden por ID
-    public boolean eliminarOrden(String id) {
-        return ordenes.remove(id) != null;
-    }
-
-    // Listar todas las órdenes
-    public List<OrdenDeCompra> listarOrdenes() {
-        return new ArrayList<>(ordenes.values());
-    }
-
-    // Listar órdenes de un cliente específico
-    public List<OrdenDeCompra> listarOrdenesPorCliente(Cliente cliente) {
-        List<OrdenDeCompra> resultado = new ArrayList<>();
-        for (OrdenDeCompra o : ordenes.values()) {
-            if (o.getCliente().equals(cliente)) {
-                resultado.add(o);
-            }
+    // Obtener ordenes de una tienda
+    public ArrayList<OrdenDeCompra> obtenerOrdenesDe(Tienda tienda) {
+        if(coleccionOrdenesTiendas.isEmpty()) System.out.println("La tienda no tiene ordenes de compra");
+        if (!coleccionOrdenesTiendas.containsKey(tienda.getClave())) {
+            return new ArrayList<OrdenDeCompra>();
         }
-        return resultado;
+        return coleccionOrdenesTiendas.get(tienda.getClave());
+    }
+
+    public OrdenDeCompra crearOrden(String id, Carrito carrito) {
+        OrdenDeCompra o = new OrdenDeCompra(id, carrito);
+        return o;
+    }
+
+    public Carrito crearCarrito(){
+        return new Carrito();
     }
 
     // Cantidad total de órdenes
     public int cantidadOrdenes() {
-        return ordenes.size();
+        return coleccionOrdenesTiendas.size();
     }
 
     @Override
     public String toString() {
         return "GestorOrdenes{" +
-                "totalOrdenes=" + ordenes.size() +
+                "totalOrdenes=" + coleccionOrdenesTiendas.size() +
                 '}';
     }
 }

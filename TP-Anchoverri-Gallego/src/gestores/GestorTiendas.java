@@ -5,8 +5,10 @@ import modelos.CategoriaTienda;
 import modelos.Producto;
 import modelos.Tienda;
 import utiles.ElementoNoEncontradoException;
+import utiles.ElementoYaExisteException;
 import utiles.Seleccionable;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -24,6 +26,15 @@ public class GestorTiendas{
 
     // Metodos para listar y seleccionar
 
+    public <T extends Seleccionable<K>,K> T buscarPorClaveGenerico (Collection<T> listado, String nuevo) throws ElementoYaExisteException {
+        for (T elemento : listado) {
+            if (elemento.getClave() instanceof String && ((String) elemento.getClave()).equalsIgnoreCase(nuevo)) {
+                return elemento;
+            }
+        }
+        throw new ElementoYaExisteException("Ya existe " + nuevo );
+    }
+
     public <T extends Seleccionable<K>,K> void listarGenerico(Collection<T> listado){
         for (T elemento : listado) {
             System.out.println(elemento.toString());
@@ -36,7 +47,7 @@ public class GestorTiendas{
                 return elemento;
             }
         }
-        throw new ElementoNoEncontradoException("No existe " + opcion + ". Intente nuevamente");
+        throw new ElementoNoEncontradoException("No existe " + opcion );
     }
 
 
@@ -75,8 +86,52 @@ public class GestorTiendas{
         return seleccionarGenerico(cat.getColeccionProductos(), opcion);
     }
 
+    // Agregar y elimiar elementos de la coleccion general
 
+    public void agregarTienda(Tienda t, CategoriaTienda cat) throws ElementoYaExisteException{
+        buscarPorClaveGenerico(cat.getColeccionTiendas(),t.getClave());
+        cat.getColeccionTiendas().add(t);
+    }
+    public void eliminarTienda(String tienda, CategoriaTienda cat) throws ElementoNoEncontradoException{
+        Tienda t= seleccionarGenerico(cat.getColeccionTiendas(),tienda);
+        cat.getColeccionTiendas().remove(t);
+    }
 
+    public void agregarCategoriaProducto(CategoriaProducto cat, Tienda t) throws ElementoYaExisteException{
+        buscarPorClaveGenerico(t.getColeccionCategoriasProductos().values(),cat.getClave());
+        t.getColeccionCategoriasProductos().put(cat.getClave(), cat);
+    }
+    public void eliminarCategoriaProducto(String categoria, Tienda t) throws ElementoNoEncontradoException{
+        CategoriaProducto cat= seleccionarGenerico(t.getColeccionCategoriasProductos().values(),categoria);
+        t.getColeccionCategoriasProductos().remove(cat.getClave());
+    }
 
+    public void agregarProducto(Producto producto, CategoriaProducto cat) throws ElementoYaExisteException{
+        buscarPorClaveGenerico(cat.getColeccionProductos(),producto.getClave());
+        cat.getColeccionProductos().add(producto);
+    }
+    public void eliminarProducto(String producto, CategoriaProducto cat) throws ElementoNoEncontradoException{
+        Producto p= seleccionarGenerico(cat.getColeccionProductos(),producto);
+        cat.getColeccionProductos().remove(p);
+    }
+
+    // Metodo crear tienda
+
+    public Tienda crearTienda(String id, String nombre) throws ElementoYaExisteException {
+        Tienda t = new Tienda();
+        t.setId(id);
+        t.setNombre(nombre);
+        t.setFechaCreacion(LocalDate.now());
+        t.setCantidadVentas(0);
+        t.setValoracion("");
+        t.setLimiteDeOrdenes(10);
+        t.setLimiteHorasOrden(24);
+        return t;
+    }
+
+    public void cambiarNombreTienda(String nuevo, Tienda t, CategoriaTienda cat) throws ElementoYaExisteException{
+        buscarPorClaveGenerico(cat.getColeccionTiendas(), nuevo);
+        t.setNombre(nuevo);
+    }
 
 }

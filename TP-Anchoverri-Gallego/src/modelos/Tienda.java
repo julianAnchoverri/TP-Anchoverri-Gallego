@@ -17,9 +17,11 @@ public class Tienda implements Seleccionable<String> {
     private String valoracion;
     private LocalDate fechaCreacion; // fecha en que se creó la tienda
     private int limiteDeOrdenes=10;
-    private int limiteHorasOrden=24;
+    private int limiteHorasOrden=24; // no son final para que puedan ser modificadas segun la necesidad del vendedor
 
     private HashMap<String,CategoriaProducto> coleccionCategoriasProductos= new HashMap<>();
+
+    public Tienda() {}
 
     public Tienda(String id, String nombre) {
         this.id = id;

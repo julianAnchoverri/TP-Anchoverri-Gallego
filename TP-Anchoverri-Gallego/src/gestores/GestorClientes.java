@@ -1,19 +1,38 @@
 package gestores;
 
-import modelos.Cliente;
+import modelos.*;
 import utiles.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GestorClientes {
-    private Map<String, Cliente> clientesPorId;
+    private ArrayList<Cliente> coleccionClientes;
+    private HashMap<String, ArrayList<Resenia>> coleccionReseniasCliente;
+    private HashMap<String, ArrayList<OrdenDeCompra>> coleccionOrdenesCliente;
+
 
     public GestorClientes() {
-        this.clientesPorId = new HashMap<>();
+        this.coleccionClientes= new ArrayList<>();
+        this.coleccionReseniasCliente = new HashMap<>();
+        this.coleccionOrdenesCliente = new HashMap<>();
     }
 
+    // Getters y Setters
+
+    public ArrayList<Cliente> getColeccionClientes() { return coleccionClientes; }
+    public void setColeccionClientes(ArrayList<Cliente> coleccionClientes) { this.coleccionClientes = coleccionClientes; }
+
+    public HashMap<String, ArrayList<Resenia>> getColeccionReseniasCliente() { return coleccionReseniasCliente; }
+    public void setColeccionReseniasCliente(HashMap<String, ArrayList<Resenia>> coleccionReseniasCliente) { this.coleccionReseniasCliente = coleccionReseniasCliente; }
+
+    public HashMap<String, ArrayList<OrdenDeCompra>> getColeccionOrdenesCliente() { return coleccionOrdenesCliente; }
+    public void setColeccionOrdenesCliente(HashMap<String, ArrayList<OrdenDeCompra>> coleccionOrdenesCliente) { this.coleccionOrdenesCliente = coleccionOrdenesCliente; }
+
+
     // Agregar cliente
+
     public void agregarCliente(Cliente cliente)
             throws ContraseniaInvalidaException, ElementoYaExisteException, EmailInvalidoException, NombreUsuarioDuplicadoException {
         if (cliente == null) {
@@ -23,32 +42,22 @@ public class GestorClientes {
         validarEmail(cliente.getEmail());
         validarNombreUsuario(cliente.getNombreUsuario());
 
-        if (clientesPorId.containsKey(cliente.getId())) {
-            throw new ElementoYaExisteException("El cliente con ID " + cliente.getId() + " ya existe.");
+        if (coleccionClientes.contains(cliente.getNombreUsuario())) {
+            throw new ElementoYaExisteException("Ya existe " + cliente.getNombreUsuario());
         }
-        clientesPorId.put(cliente.getId(), cliente);
+        coleccionClientes.add(cliente);
     }
 
     // Eliminar cliente
-    public void eliminarCliente(String id) throws ElementoNoEncontradoException {
-        if (!clientesPorId.containsKey(id)) {
-            throw new ElementoNoEncontradoException("No existe cliente con ID " + id);
-        }
-        clientesPorId.remove(id);
+    public void eliminarCliente(String nombre) throws ElementoNoEncontradoException {
+        Cliente cliente= buscarPorNombreUsuario(nombre);
+        coleccionClientes.remove(cliente);
     }
 
-    // Buscar cliente por id
-    public Cliente buscarClientePorId(String id) throws ElementoNoEncontradoException {
-        Cliente cliente = clientesPorId.get(id);
-        if (cliente == null) {
-            throw new ElementoNoEncontradoException("No existe cliente con ID " + id);
-        }
-        return cliente;
-    }
 
     // Buscar cliente por nombre de usuario
     public Cliente buscarPorNombreUsuario(String nombreUsuario) throws ElementoNoEncontradoException {
-        for (Cliente c : clientesPorId.values()) {
+        for (Cliente c : coleccionClientes) {
             if (c.getNombreUsuario().equals(nombreUsuario)) {
                 return c;
             }
@@ -56,11 +65,40 @@ public class GestorClientes {
         throw new ElementoNoEncontradoException("No existe cliente con nombre de usuario " + nombreUsuario);
     }
 
-
-    // Listar todos los clientes
-    public Map<String, Cliente> getClientes() {
-        return clientesPorId;
+    // Agregar resenia a un cliente
+    public void agregarReseniaA(Cliente cliente, Resenia resenia) {
+        if (!coleccionClientes.contains(cliente.getNombreUsuario())) {
+            coleccionReseniasCliente.put(cliente.getNombreUsuario(), new ArrayList<Resenia>());
+        }
+        coleccionReseniasCliente.get(cliente.getNombreUsuario()).add(resenia);
     }
+
+    // Obtener resenias de un cliente
+    public ArrayList<Resenia> obtenerReseniasDe(Cliente cliente) {
+        if(coleccionReseniasCliente.isEmpty()) System.out.println("El cliente no tiene reseñas");
+        if (!coleccionReseniasCliente.containsKey(cliente.getNombreUsuario())) {
+            return new ArrayList<Resenia>();
+        }
+        return coleccionReseniasCliente.get(cliente.getNombreUsuario());
+    }
+
+    // Agregar orden a un cliente
+    public void agregarOrdenA(Cliente cliente, OrdenDeCompra orden) {
+        if (!coleccionClientes.contains(cliente.getNombreUsuario())) {
+            coleccionOrdenesCliente.put(cliente.getNombreUsuario(), new ArrayList<OrdenDeCompra>());
+        }
+        coleccionOrdenesCliente.get(cliente.getNombreUsuario()).add(orden);
+    }
+
+    // Obtener ordenes de un cliente
+    public ArrayList<OrdenDeCompra> obtenerOrdenesDe(Cliente cliente) {
+        if(coleccionOrdenesCliente.isEmpty()) System.out.println("El cliente no tiene ordenes de compra");
+        if (!coleccionOrdenesCliente.containsKey(cliente.getNombreUsuario())) {
+            return new ArrayList<OrdenDeCompra>();
+        }
+        return coleccionOrdenesCliente.get(cliente.getNombreUsuario());
+    }
+
 
     // Validacionesssssss
     private void validarEmail(String email) throws EmailInvalidoException {
@@ -80,7 +118,7 @@ public class GestorClientes {
     }
 
     private void validarNombreUsuario(String nombreUsuario) throws NombreUsuarioDuplicadoException {
-        for (Cliente c : clientesPorId.values()) {
+        for (Cliente c : coleccionClientes) {
             if (c.getNombreUsuario().equals(nombreUsuario)) {
                 throw new NombreUsuarioDuplicadoException("El nombre de usuario ya está en uso.");
             }
@@ -89,31 +127,32 @@ public class GestorClientes {
 
 
     // actualizacion de datosssss
-    public void actualizarEmail(String idCliente, String nuevoEmail)
+
+    public void actualizarEmail(String nombre, String nuevoEmail)
             throws ElementoNoEncontradoException, EmailInvalidoException {
-        Cliente cliente = buscarClientePorId(idCliente);
+        Cliente cliente = buscarPorNombreUsuario(nombre);
         validarEmail(nuevoEmail);
         cliente.setEmail(nuevoEmail);
     }
 
-    public void actualizarContrasenia(String idCliente, String nuevaContrasenia)
+    public void actualizarContrasenia(String nombre, String nuevaContrasenia)
             throws ElementoNoEncontradoException, ContraseniaInvalidaException {
-        Cliente cliente = buscarClientePorId(idCliente);
+        Cliente cliente = buscarPorNombreUsuario(nombre);
         validarContrasenia(nuevaContrasenia);
         cliente.setContrasenia(nuevaContrasenia);
     }
 
-    public void actualizarNombre(String idCliente, String nuevoNombre, String nuevoApellido)
+    public void actualizarNombre(String nombre, String nuevoNombre, String nuevoApellido)
             throws ElementoNoEncontradoException {
-        Cliente cliente = buscarClientePorId(idCliente);
+        Cliente cliente = buscarPorNombreUsuario(nombre);
         cliente.setNombre(nuevoNombre);
         cliente.setApellido(nuevoApellido);
     }
 
-    public void actualizarNombreUsuario(String idCliente, String nuevoNombreUsuario)
+    public void actualizarNombreUsuario(String nombre, String nuevoNombreUsuario)
             throws ElementoNoEncontradoException, NombreUsuarioDuplicadoException {
         validarNombreUsuario(nuevoNombreUsuario);
-        Cliente cliente = buscarClientePorId(idCliente);
+        Cliente cliente = buscarPorNombreUsuario(nombre);
         cliente.setNombreUsuario(nuevoNombreUsuario);
     }
 

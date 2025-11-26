@@ -11,6 +11,7 @@ public class Resenia implements JsonSerializable {
     private String texto;
     private int puntuacion; // 1 a 5
     private LocalDate fecha;
+    private int idCliente;
 
     public Resenia(String id, String texto, int puntuacion) {
         this.id= id;

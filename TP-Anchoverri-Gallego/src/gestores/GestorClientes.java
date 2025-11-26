@@ -11,9 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GestorClientes implements JsonSerializable{
-    private ArrayList<Cliente> coleccionClientes;
-    private HashMap<String, ArrayList<Resenia>> coleccionReseniasCliente;
-    private HashMap<String, ArrayList<OrdenDeCompra>> coleccionOrdenesCliente;
+    private Map<String,Cliente> coleccionClientes;
 
 
     public GestorClientes() {

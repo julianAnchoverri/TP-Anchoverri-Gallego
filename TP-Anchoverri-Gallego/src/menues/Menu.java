@@ -1,7 +1,6 @@
-package main;
+package menues;
 
 import gestores.*;
-import menues.Menu;
 import modelos.*;
 import utiles.ElementoNoEncontradoException;
 import utiles.ElementoYaExisteException;
@@ -9,18 +8,22 @@ import utiles.ElementoYaExisteException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class Main {
+public class Menu{
+    private Scanner scanner= new Scanner(System.in); //DEBERIA SER EL UNICO SCANNER DEL PROYECTO. Todo dato por teclado se ingresa desde el main y se pasa como parametro
+    private GestorTiendas gt= new GestorTiendas();
+    private Vendedor vendedor = new Vendedor("Julian","Anchoverri","asdasd@gmail.com","Julo390","123Abc");
+    private Cliente cliente = new Cliente("Juanpi","Gallego","opiopiop@gmail.com","JuanpyG25","Abc123","Calle 123");
+    private GestorVendedores gv;
+    private GestorClientes gc;
+    private GestorOrdenes go= new GestorOrdenes();
+    private GestorResenias gr= new GestorResenias();
+    private final int maximaCantidadOrdenes=50;
+    private final int maximaCantidadHoras=72;
 
-    /*static Scanner scanner= new Scanner(System.in); //DEBERIA SER EL UNICO SCANNER DEL PROYECTO. Todo dato por teclado se ingresa desde el main y se pasa como parametro
-    GestorTiendas gt= new GestorTiendas();
-    Vendedor vendedor = new Vendedor("Julian","Anchoverri","asdasd@gmail.com","Julo390","123Abc");
-    Cliente cliente = new Cliente("Juanpi","Gallego","opiopiop@gmail.com","JuanpyG25","Abc123","Calle 123");
-    static GestorVendedores gv= new GestorVendedores();
-    static GestorClientes gc= new GestorClientes();
-    GestorOrdenes go= new GestorOrdenes();
-    GestorResenias gr= new GestorResenias();
-    public final int maximaCantidadOrdenes=50;
-    public final int maximaCantidadHoras=72;
+    public Menu(GestorVendedores gv, GestorClientes gc) {
+        this.gv = gv;
+        this.gc = gc;
+    }
 
     private <T> T devolverObjeto(Class<T> tipo){
 
@@ -257,7 +260,7 @@ public class Main {
 
                         System.out.println("Quiere modificar otra orden?[S/N]");
                         respuesta=scanner.nextLine().trim().toUpperCase().charAt(0);
-                    }while(respuesta == 'S');
+                    }while(respuesta == 'S');*/
                     break;
                 case 7:
                     System.out.println("Volviendo al menú principal...");
@@ -370,40 +373,6 @@ public class Main {
                 default:
                     System.out.println("Opción inválida, intente nuevamente.");
             }
-        }
-    }*/
-
-    public static void main(String[] args) {
-
-        Scanner scanner= new Scanner(System.in); //DEBERIA SER EL UNICO SCANNER DEL PROYECTO. Todo dato por teclado se ingresa desde el main y se pasa como parametro
-        GestorVendedores gv= new GestorVendedores();
-        GestorClientes gc= new GestorClientes();
-        System.out.println("Bienvenido al Gestor de tiendas");
-
-        System.out.println("Ingrese su nombre de usuario:");
-        String nombre = scanner.nextLine();
-
-        Usuario usuario = null;
-
-// Bucle para obligar a que haya un usuario válido
-        while (usuario == null) {
-            try {
-                usuario = gc.buscarPorNombreUsuario(nombre);   // gestor clientes
-            } catch (ElementoNoEncontradoException e1) {
-                try {
-                    usuario = gv.buscarPorNombreUsuario(nombre);  // gestor vendedores
-                } catch (ElementoNoEncontradoException e2) {
-                    System.out.println(e2.getMessage());
-                    System.out.println("Ingrese nuevamente el nombre de usuario:");
-                    nombre = scanner.nextLine();
-                }
-            }
-        }
-        Menu menu = new Menu(gv, gc);
-        if (usuario instanceof Vendedor) {
-        menu.mostrarMenuVendedor();
-        } else {
-            menu.mostrarMenuCliente();
         }
     }
 }

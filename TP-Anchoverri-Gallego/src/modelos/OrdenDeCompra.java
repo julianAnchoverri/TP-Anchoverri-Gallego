@@ -13,6 +13,7 @@ public class OrdenDeCompra implements JsonSerializable {
     private Carrito carrito;
     private EstadoOrdenEnum estado;
     private LocalDateTime fecha;
+    private int idCliente;
 
 
     public OrdenDeCompra(String id, Carrito carrito) {

@@ -1,9 +1,11 @@
 package gestores;
 
+import modelos.Cliente;
 import modelos.Tienda;
 import modelos.Vendedor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utiles.ElementoNoEncontradoException;
 import utiles.JsonSerializable;
 
 import java.util.ArrayList;
@@ -25,6 +27,15 @@ public class GestorVendedores implements JsonSerializable {
 
 
     // Metodos
+
+    public Vendedor buscarPorNombreUsuario(String nombreUsuario) throws ElementoNoEncontradoException {
+        for (Vendedor v : coleccionVendedores) {
+            if (v.getNombreUsuario().equals(nombreUsuario)) {
+                return v;
+            }
+        }
+        throw new ElementoNoEncontradoException("No existe vendedor con nombre de usuario " + nombreUsuario);
+    }
 
     // Agregar un vendedor
     public void agregarVendedor(Vendedor vendedor) {

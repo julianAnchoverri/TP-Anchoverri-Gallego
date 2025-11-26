@@ -8,12 +8,13 @@ public class OrdenDeCompra {
     private Cliente cliente; /// O GUARDAR SOLO EL ID DEL CLIENTE PARA SER MAS LIVIANO CUANDO LO PASAS A JSON
     private Set<Producto> productos;
     private EstadoOrdenEnum estado;
+    private double total;
 
     public OrdenDeCompra(String id, Cliente cliente) {
         this.id = id;
         this.cliente = cliente;
         this.productos = new HashSet<>();
-        this.estado = EstadoOrdenEnum.PENDIENTE; // por defecto
+        this.estado = EstadoOrdenEnum.PENDIENTE;// por defecto
     }
 
     public String getId() { return id; }
@@ -27,6 +28,9 @@ public class OrdenDeCompra {
 
     public EstadoOrdenEnum getEstado() { return estado; }
     public void setEstado(EstadoOrdenEnum estado) { this.estado = estado; }
+
+    public double getTotal() { return total; }
+    public void setTotal(double total) { this.total = total; }
 
     @Override
     public String toString() {

@@ -7,6 +7,8 @@ import modelos.Producto;
 import java.util.HashSet;
 import java.util.Set;
 
+// LA CLASE CARRITO SIRVE COMO INTERMEDIARIO ENTRE CLIENTE Y ORDEN DE COMPRA.
+// GENERA UNA ORDEN DE COMPRA DE LOS PRODUCTOS QUE SE LE AGREGUEN.
 public class Carrito {
     private Cliente cliente;          // o guardar solo el id si la orden tiene solo idCliente
     private Set<Producto> productos;   // productos seleccionados
@@ -37,10 +39,26 @@ public class Carrito {
         return cliente;
     }
 
+    public double calcularTotal() {
+        double total = 0;
+        for (Producto p : productos) {
+            total += p.getPrecio();
+        }
+        return total;
+    }
+
     // Genera una orden de compra a partir del carrito
     public OrdenDeCompra generarOrdenDeCompra(String idOrden) {
         OrdenDeCompra orden = new OrdenDeCompra(idOrden, cliente);
         orden.setProductos(new HashSet<>(productos)); // copia los productos
+
+        // Calcula el total y lo pone en la orden
+        double total = 0;
+        for (Producto p : productos) {
+            total += p.getPrecio();
+        }
+        orden.setTotal(total);
+
         return orden;
     }
 

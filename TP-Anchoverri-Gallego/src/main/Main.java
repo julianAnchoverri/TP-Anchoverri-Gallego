@@ -1,11 +1,11 @@
 package main;
 
-import gestores.GestorTiendas;
-import gestores.GestorVendedores;
+import gestores.*;
 import modelos.*;
 import utiles.ElementoNoEncontradoException;
 import utiles.ElementoYaExisteException;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -13,7 +13,10 @@ public class Main {
     Scanner scanner= new Scanner(System.in); //DEBERIA SER EL UNICO SCANNER DEL PROYECTO. Todo dato por teclado se ingresa desde el main y se pasa como parametro
     GestorTiendas gt= new GestorTiendas();
     Vendedor vendedor = new Vendedor("Julian","Anchoverri","asdasd@gmail.com","Julo390","123Abc");
+    Cliente cliente = new Cliente("Juanpi","Gallego","opiopiop@gmail.com","JuanpyG25","Abc123","Calle 123");
     GestorVendedores gv= new GestorVendedores();
+    GestorClientes gc= new GestorClientes();
+    GestorOrdenes go= new GestorOrdenes();
     public final int maximaCantidadOrdenes=50;
     public final int maximaCantidadHoras=72;
 
@@ -228,6 +231,119 @@ public class Main {
                     System.out.println("Opción inválida, intente nuevamente.");
             }
         } ;
+    }
+
+    public void mostrarMenuCliente() {
+        while (true){
+            System.out.println("\n===== MENÚ DEL CLIENTE =====");
+            System.out.println("Bienvenido, " + cliente.getNombreUsuario());
+            System.out.println("-----------------------------");
+            System.out.println("1. Ver perfil");
+            System.out.println("2. Ver el catalogo");
+            System.out.println("3. Ver mis compras");
+            System.out.println("4. Ver mis reseñas");
+            System.out.println("5. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+
+            while (!scanner.hasNextInt()) {
+                System.out.print("Opción inválida. Ingrese un número: ");
+                scanner.next();
+            }
+
+            int opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    System.out.println(cliente.toString());
+                    break;
+                case 2:
+                    Producto p = devolverObjeto(Producto.class);
+                    if(p==null){
+                        break;
+                    }
+                    System.out.println("seleccione una opcion: ");
+                    System.out.println("1. hacer una orden de compra: ");
+                    System.out.println("2. hacer reseña: ");
+                    System.out.println("3. salir: ");
+                    int seleccion;
+                    do {
+                        seleccion = scanner.nextInt();
+                        switch (seleccion) {
+                            case 1:
+                                System.out.println("Seleccione nuevamente la tienda: ");
+                                Tienda t= devolverObjeto(Tienda.class);
+
+
+                                System.out.println("orden generada");
+                                seleccion = 3;
+                                break;
+                            case 2:
+                                try {
+                                    crearResenia(p);
+                                } catch (PuntuacionInvalidaException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                                System.out.println("Reseña finalizada");
+                                seleccion = 3;
+                                break;
+                            case 3:
+                                System.out.println("Volviendo al menú principal...");
+                                return;
+                            default:
+                                System.out.println("opcion invalida, vuelva a ingresar");
+                        }
+
+                    } while(seleccion != 3);
+                    break;
+                case 3:
+                    Carrito carrito= new Carrito();
+                    System.out.println("=== Agrege al carrito solo productos de la misma tienda ===");
+                    while (true){
+                        System.out.println("== Menu de seleccion == \n Va a seleccionar el producto que quiere agregar al carrito (Ingrese F para terminar)");
+                        Producto producto= devolverObjeto(Producto.class);
+                        if(producto==null) break;
+                        carrito.agregarProducto(producto);
+                    }
+                    carrito.calcularTotal();
+                    if (carrito.getTotal()==0){
+                        System.out.println("Carrito vacio. Operacion cancelada");
+                        break;
+                    }
+                    System.out.println("== Menu de seleccion == \n Va a seleccionar la tienda de la que son sus productos (Ingrese F para terminar)");
+                    Tienda tienda;
+                    do {
+                        tienda = devolverObjeto(Tienda.class);
+                    }while (tienda == null);
+                    if(go.getColeccionOrdenesTiendas().get(tienda.getClave()).size() >= tienda.getLimiteDeOrdenes()) {
+                        System.out.println("Se alcanzó el límite de órdenes activas en la tienda. Operacion cancelada");
+                        break;
+                    }
+                    LocalDate fecha = LocalDate.now();
+                    String fechaStr = fecha.toString();// para crear id unico
+                    OrdenDeCompra orden= go.crearOrden(cliente.getNombreUsuario()+fechaStr, carrito);
+                    go.agregarOrdenA(tienda,orden);
+                    gc.agregarOrdenA(cliente,orden);
+
+
+
+
+                case 3:
+                    System.out.println("Compras de "+ cliente.getNombreCompleto());
+                    verCompras();
+                    break;
+
+                case 4:
+                    System.out.println("Reseñas de " +  cliente.getNombreCompleto());
+                    listarComentarios();
+                    break;
+                case 5:
+                    System.out.println("Volviendo al menú principal...");
+                    return;
+                default:
+                    System.out.println("Opción inválida, intente nuevamente.");
+            }
+        }
     }
 
     public static void main(String[] args) {

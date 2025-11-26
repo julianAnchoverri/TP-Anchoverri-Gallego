@@ -1,5 +1,6 @@
 package modelos;
 
+import org.json.JSONObject;
 import utiles.Seleccionable;
 
 import java.time.LocalDate;
@@ -12,7 +13,6 @@ import java.util.Set;
 public class Tienda implements Seleccionable<String> {
     private String id;
     private String nombre;
-    private Set<Resenia> resenias; // cambiar : Esto va en el gestor
     private int cantidadVentas= 0;
     private String valoracion;
     private LocalDate fechaCreacion; // fecha en que se creó la tienda
@@ -30,6 +30,48 @@ public class Tienda implements Seleccionable<String> {
         this.limiteDeOrdenes=10;
         this.limiteHorasOrden=24;
     }
+
+    // --- Métodos toJson y fromJson ---
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("nombre", nombre);
+        json.put("cantidadVentas", cantidadVentas);
+        json.put("valoracion", valoracion);
+        json.put("fechaCreacion", fechaCreacion.toString()); // LocalDate como String ISO
+        json.put("limiteDeOrdenes", limiteDeOrdenes);
+        json.put("limiteHorasOrden", limiteHorasOrden);
+
+        // Serializar el mapa de categorías
+        JSONObject categoriasJson = new JSONObject();
+        for (String key : coleccionCategoriasProductos.keySet()) {
+            categoriasJson.put(key, coleccionCategoriasProductos.get(key).toJson());
+        }
+        json.put("categorias", categoriasJson);
+
+        return json;
+    }
+
+    public static Tienda fromJson(JSONObject json) {
+        Tienda tienda = new Tienda(json.getString("id"), json.getString("nombre"));
+        tienda.setCantidadVentas(json.getInt("cantidadVentas"));
+        tienda.setValoracion(json.getString("valoracion"));
+        tienda.setFechaCreacion(LocalDate.parse(json.getString("fechaCreacion")));
+        tienda.setLimiteDeOrdenes(json.getInt("limiteDeOrdenes"));
+        tienda.setLimiteHorasOrden(json.getInt("limiteHorasOrden"));
+
+        // Reconstruir el mapa de categorías
+        JSONObject categoriasJson = json.getJSONObject("categorias");
+        HashMap<String, CategoriaProducto> categorias = new HashMap<>();
+        for (String key : categoriasJson.keySet()) {
+            JSONObject catJson = categoriasJson.getJSONObject(key);
+            categorias.put(key, CategoriaProducto.fromJson(catJson));
+        }
+        tienda.setColeccionCategoriasProductos(categorias);
+
+        return tienda;
+    }
+
 
     // Metodo para calcular fiabilidad
 
@@ -91,6 +133,8 @@ public class Tienda implements Seleccionable<String> {
     public void setColeccionCategoriasProductos(HashMap<String, CategoriaProducto> coleccionCategoriasProductos) {
         this.coleccionCategoriasProductos = coleccionCategoriasProductos;
     }
+
+
 
     @Override
     public String getClave() {

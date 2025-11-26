@@ -1,5 +1,7 @@
 package modelos;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utiles.Seleccionable;
 
 import java.util.HashSet;
@@ -31,6 +33,35 @@ public class CategoriaProducto implements Seleccionable<String> {
     public void setColeccionProductos(HashSet<Producto> coleccionProductos) {
         this.coleccionProductos = coleccionProductos;
     }
+
+    // --- Métodos toJson y fromJson ---
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("nombre", nombre);
+
+        JSONArray productosArray = new JSONArray();
+        for (Producto p : coleccionProductos) {
+            productosArray.put(p.toJson()); // delega en Producto
+        }
+        json.put("productos", productosArray);
+
+        return json;
+    }
+
+    public static CategoriaProducto fromJson(JSONObject json) {
+        CategoriaProducto categoria = new CategoriaProducto(json.getString("nombre"));
+
+        JSONArray productosArray = json.getJSONArray("productos");
+        HashSet<Producto> productos = new HashSet<>();
+        for (int i = 0; i < productosArray.length(); i++) {
+            JSONObject prodJson = productosArray.getJSONObject(i);
+            productos.add(Producto.fromJson(prodJson)); // delega en Producto
+        }
+        categoria.setColeccionProductos(productos);
+
+        return categoria;
+    }
+
 
     @Override
     public String getClave() {
